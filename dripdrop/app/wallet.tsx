@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useWalletConnectModal } from '@walletconnect/modal-react-native';
 import { ethers } from 'ethers';
 
+import { useWalletConnect } from '@/hooks/useWalletConnect';
 import { useDripStore } from '@/stores/useDripStore';
 import {
   estimateTransferGas,
@@ -18,7 +18,7 @@ const TESTNET_TOKEN_DECIMALS = Number(process.env.EXPO_PUBLIC_DRIP_TOKEN_DECIMAL
 const DEFAULT_CHAIN: SupportedChainKey = 'baseSepolia';
 
 export default function WalletScreen() {
-  const { isConnected, open, provider, address } = useWalletConnectModal();
+  const { isConnected, open, provider, address } = useWalletConnect();
   const { phase, dripBalance, sendDripToUser, queueExternalTransfer } = useDripStore((state) => ({
     phase: state.phase,
     dripBalance: state.dripBalance,
