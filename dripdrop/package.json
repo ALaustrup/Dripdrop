@@ -21,6 +21,7 @@
     "@sentry/react-native": "^8.10.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/supabase-js": "^2.105.3",
+    "@vercel/analytics": "^2.0.1",
     "@walletconnect/modal-react-native": "^1.1.0",
     "ethers": "^5.8.0",
     "expo": "~54.0.33",

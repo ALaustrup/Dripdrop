@@ -1,8 +1,10 @@
 import { WalletConnectModal } from '@walletconnect/modal-react-native';
+import { Analytics } from '@vercel/analytics/next';
 import { Stack } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
@@ -31,6 +33,7 @@ export default function RootLayout() {
           <Stack.Screen name="wallet" options={{ presentation: 'card' }} />
           <Stack.Screen name="roadmap" options={{ presentation: 'modal' }} />
         </Stack>
+        {Platform.OS === 'web' ? <Analytics /> : null}
         <WalletConnectModal {...walletConnectModalConfig} />
         <StatusBar style="light" />
       </GestureHandlerRootView>
