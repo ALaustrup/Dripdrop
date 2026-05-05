@@ -1,5 +1,5 @@
 import { WalletConnectModal } from '@walletconnect/modal-react-native';
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/react';
 import { Stack } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { StatusBar } from 'expo-status-bar';

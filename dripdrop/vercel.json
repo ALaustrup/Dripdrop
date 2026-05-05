@@ -1,6 +1,6 @@
 {
   "framework": null,
-  "buildCommand": "npm run web",
+  "buildCommand": "npm run web:build",
   "outputDirectory": "dist",
   "rewrites": [
     {
