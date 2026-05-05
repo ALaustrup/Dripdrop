@@ -5,15 +5,20 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
+const hasSupabaseConfig = Boolean(supabaseUrl && supabaseAnonKey);
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!hasSupabaseConfig) {
   // Keep runtime warning instead of hard crash so app can run with offline fallback.
   // Supabase calls should gracefully fail until env vars are configured.
   // eslint-disable-next-line no-console
   console.warn('Supabase environment variables are missing. Configure EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Fallback placeholders prevent client-constructor crashes when env is missing.
+const safeSupabaseUrl = hasSupabaseConfig ? supabaseUrl : 'https://example.supabase.co';
+const safeSupabaseAnonKey = hasSupabaseConfig ? supabaseAnonKey : 'public-anon-placeholder';
+
+export const supabase = createClient(safeSupabaseUrl, safeSupabaseAnonKey, {
   auth: {
     storage: {
       getItem: async (key: string): Promise<string | null> => {
@@ -68,18 +73,39 @@ AppState.addEventListener('change', (state) => {
 const SESSION_KEY = 'dripdrop-auth-session';
 
 export function hasSupabaseEnv(): boolean {
-  return Boolean(supabaseUrl && supabaseAnonKey);
+  return hasSupabaseConfig;
 }
 
 export async function persistSessionSecurely(sessionJson: string): Promise<void> {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(SESSION_KEY, sessionJson);
+    }
+    return;
+  }
+
   await SecureStore.setItemAsync(SESSION_KEY, sessionJson);
 }
 
 export async function readPersistedSession(): Promise<string | null> {
+  if (Platform.OS === 'web') {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return null;
+    }
+    return window.localStorage.getItem(SESSION_KEY);
+  }
+
   return SecureStore.getItemAsync(SESSION_KEY);
 }
 
 export async function clearPersistedSession(): Promise<void> {
+  if (Platform.OS === 'web') {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(SESSION_KEY);
+    }
+    return;
+  }
+
   await SecureStore.deleteItemAsync(SESSION_KEY);
 }
 
