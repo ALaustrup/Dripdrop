@@ -6,7 +6,7 @@ type NoopWalletConnect = {
   provider: undefined;
 };
 
-export function useWalletConnectModal(): NoopWalletConnect {
+export function useWalletConnect(): NoopWalletConnect {
   return {
     open: async () => {},
     close: () => {},

@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useDripStore } from '@/stores/useDripStore';
 
 export function useBoostMode() {
-  const { isBoostActive, boostMultiplier, boostEndsAt, boostCooldownUntil, clearBoostIfExpired } = useDripStore((state) => ({
+  const { isBoostActive, boostMultiplier, boostEndsAt, boostCooldownUntil, clearBoostIfExpired } = useDripStore(useShallow((state) => ({
     isBoostActive: state.isBoostActive,
     boostMultiplier: state.boostMultiplier,
     boostEndsAt: state.boostEndsAt,
     boostCooldownUntil: state.boostCooldownUntil,
     clearBoostIfExpired: state.clearBoostIfExpired,
-  }));
+  })));
 
   const now = Date.now();
   clearBoostIfExpired();

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDripStore } from '@/stores/useDripStore';
 
 type TapHandlerOptions = {
@@ -10,10 +10,13 @@ export function useTapHandler(options?: TapHandlerOptions): {
   canTap: boolean;
   cooldownSeconds: number;
 } {
-  const canTapResult = useDripStore((state) => state.canTap());
+  const canTapFn = useDripStore((state) => state.canTap);
   const recordTapLocally = useDripStore((state) => state.recordTapLocally);
   const maybeTriggerBoost = useDripStore((state) => state.maybeTriggerBoost);
   const suspiciousCooldownUntil = useDripStore((state) => state.suspiciousCooldownUntil);
+  const recentTapTimestamps = useDripStore((state) => state.recentTapTimestamps);
+
+  const canTapResult = useMemo(() => canTapFn(), [canTapFn, recentTapTimestamps, suspiciousCooldownUntil]);
 
   const cooldownSeconds = canTapResult.allowed
     ? 0
