@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useShallow } from 'zustand/react/shallow';
 
 import { CloudMeter } from '@/components/CloudMeter';
 import { Droplet } from '@/components/Droplet';
@@ -53,7 +54,7 @@ export default function HomeScreen() {
     logout,
     syncAuthProfile,
     evaluateLaunchReadiness,
-  } = useDripStore((state) => ({
+  } = useDripStore(useShallow((state) => ({
     isOnline: state.isOnline,
     launchDate: state.launchDate,
     launchCountdownEndsAt: state.launchCountdownEndsAt,
@@ -72,7 +73,7 @@ export default function HomeScreen() {
     logout: state.logout,
     syncAuthProfile: state.syncAuthProfile,
     evaluateLaunchReadiness: state.evaluateLaunchReadiness,
-  }));
+  })));
   const { activeBoost } = useBoostMode();
   const { handleTap, canTap: canTapButton, cooldownSeconds } = useTapHandler();
   const { open, isConnected, address } = useWalletConnect();

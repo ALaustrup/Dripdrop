@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ethers } from 'ethers';
+import { useShallow } from 'zustand/react/shallow';
 
 import { useWalletConnect } from '@/hooks/useWalletConnect';
 import { useDripStore } from '@/stores/useDripStore';
@@ -19,12 +20,12 @@ const DEFAULT_CHAIN: SupportedChainKey = 'baseSepolia';
 
 export default function WalletScreen() {
   const { isConnected, open, provider, address } = useWalletConnect();
-  const { phase, dripBalance, sendDripToUser, queueExternalTransfer } = useDripStore((state) => ({
+  const { phase, dripBalance, sendDripToUser, queueExternalTransfer } = useDripStore(useShallow((state) => ({
     phase: state.phase,
     dripBalance: state.dripBalance,
     sendDripToUser: state.sendDripToUser,
     queueExternalTransfer: state.queueExternalTransfer,
-  }));
+  })));
 
   const [usernameRecipient, setUsernameRecipient] = useState('');
   const [walletRecipient, setWalletRecipient] = useState('');
