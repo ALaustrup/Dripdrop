@@ -12,7 +12,6 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useWalletConnectModal } from '@walletconnect/modal-react-native';
 
 import { CloudMeter } from '@/components/CloudMeter';
 import { Droplet } from '@/components/Droplet';
@@ -20,6 +19,7 @@ import { PhaseIndicator } from '@/components/PhaseIndicator';
 import { useBoostMode } from '@/hooks/useBoostMode';
 import { usePhase } from '@/hooks/usePhase';
 import { useTapHandler } from '@/hooks/useTapHandler';
+import { useWalletConnect } from '@/hooks/useWalletConnect';
 import {
   ensureProfile,
   hasSupabaseEnv,
@@ -75,7 +75,7 @@ export default function HomeScreen() {
   }));
   const { activeBoost } = useBoostMode();
   const { handleTap, canTap: canTapButton, cooldownSeconds } = useTapHandler();
-  const { open, isConnected, address } = useWalletConnectModal();
+  const { open, isConnected, address } = useWalletConnect();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

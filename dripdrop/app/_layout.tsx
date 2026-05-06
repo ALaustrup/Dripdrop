@@ -1,4 +1,3 @@
-import { WalletConnectModal } from '@walletconnect/modal-react-native';
 import { Analytics } from '@vercel/analytics/react';
 import { Stack } from 'expo-router';
 import * as Notifications from 'expo-notifications';
@@ -9,10 +8,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
 import { AppErrorBoundary } from '@/components/AppErrorBoundary';
-import { walletConnectModalConfig } from '@/services/walletConnect';
+import { WalletConnectModalWrapper } from '@/components/WalletConnectModalWrapper';
 
 export default function RootLayout() {
   useEffect(() => {
+    if (Platform.OS === 'web') {
+      return;
+    }
+
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
@@ -34,7 +37,7 @@ export default function RootLayout() {
           <Stack.Screen name="roadmap" options={{ presentation: 'modal' }} />
         </Stack>
         {Platform.OS === 'web' ? <Analytics /> : null}
-        <WalletConnectModal {...walletConnectModalConfig} />
+        <WalletConnectModalWrapper />
         <StatusBar style="light" />
       </GestureHandlerRootView>
     </AppErrorBoundary>
