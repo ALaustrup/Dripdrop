@@ -3,7 +3,9 @@ import NetInfo from '@react-native-community/netinfo';
 import * as Crypto from 'expo-crypto';
 import debounce from 'lodash.debounce';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
+// Zustand's ESM middleware bundle can ship raw import.meta, which breaks Expo web's classic script output.
+// Requiring the CJS entry avoids that parse-time crash on mobile browsers.
+const { createJSONStorage, persist } = require('zustand/middleware') as typeof import('zustand/middleware');
 
 import { clearPersistedSession, hasSupabaseEnv, persistSessionSecurely, supabase } from '@/services/supabase';
 import { antiCheatConfig, calculateCooldownEnd, isCooldownActive } from '@/utils/antiCheat';
